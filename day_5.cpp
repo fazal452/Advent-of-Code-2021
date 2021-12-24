@@ -23,11 +23,8 @@ int main() {
     //Create Vector of Coordinates
     vector<coordinate> arr;
 
-
-
-
     //Open File
-    ifstream myfile("C:\\Users\\FazalR\\CLionProjects\\SpacialPlace\\distances.txt");
+    ifstream myfile("C:\\Users\\fazal\\CLionProjects\\Black-Jack\\distances.txt");
     string line;
 
 
@@ -38,7 +35,7 @@ int main() {
 
             int x1,y1,x2,y2;
 
-            //Convert Str to Number Number
+            //Convert Str to Number
             x1 = stoi(line.substr(0,line.find(',')));
 
             y1 = stoi(line.substr(line.find(',') + 1, line.find("-")-4));
@@ -90,7 +87,7 @@ int main() {
             }
 
             //Horizontal Line
-            if(y1 == y2){
+            else if(y1 == y2){
 
                 //If order misplaced
                 if ( x1 > x2){
@@ -122,8 +119,74 @@ int main() {
                 }
 
             }
-            
-            
+
+            //If Diagonal Line
+            else{
+
+                //Only go form left to right
+                if(x1 > x2){
+                    int tempx = x1; int tempy = y1;
+                    x1 = x2; y1 = y2;
+                    x2 = tempx; y2 = tempy;
+                }
+
+                int distance = x2 - x1;
+
+                if(y2 > y1){
+
+                    for(int i = 0; i <= distance; i++){
+
+                        bool toBeAdded = true;
+
+                        for(int k = 0 ; k<arr.size(); k++){
+                            if((arr[k].y == (y1+i)) && (arr[k].x == (x1+i))){
+                                arr[k].crossed++;
+                                toBeAdded = false;
+
+                            }
+                        }
+
+                        if(toBeAdded){
+                            coordinate temp;
+                            temp.y = (y1+i);
+                            temp.x = (x1+i);
+                            temp.crossed = 0;
+
+                            arr.push_back(temp);
+                        }
+
+                    }
+
+                }
+
+                else if(y1 > y2){
+
+                    for(int i = 0; i <= distance; i++){
+
+                        bool toBeAdded = true;
+
+                        for(int k = 0 ; k<arr.size(); k++){
+                            if((arr[k].y == (y1-i)) && (arr[k].x == (x1+i))){
+                                arr[k].crossed++;
+                                toBeAdded = false;
+
+                            }
+                        }
+
+                        if(toBeAdded){
+                            coordinate temp;
+                            temp.y = (y1-i);
+                            temp.x = (x1+i);
+                            temp.crossed = 0;
+
+                            arr.push_back(temp);
+                        }
+
+                    }
+
+                }
+
+            }
 
         }
         myfile.close();
